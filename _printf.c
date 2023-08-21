@@ -1,13 +1,16 @@
 #include "main.h"
 
 /**
+  * _printf - printf function recreation
+  * format: string input
+  * Return: number of characters printed
   */
 
 int _printf(const char *format, ...)
 {
 	/* To keep track of the number of characters printed */
-	int cnt = 0, c, s;
-	const char *p;
+	int cnt = 0, c;
+	const char *p, *s;
 
 	va_list arg;
 
@@ -21,40 +24,44 @@ int _printf(const char *format, ...)
 			cnt++;
 		}
 
-		if (*p == 'c')
-		{
-			/* Fetch a character and store it in c var */
-			c = va_arg(arg, int);
-			_putchr(c);
-			cnt++;
-		}
-
-		else if (*p == 's')
-		{
-			/* Fetch a string and assign it to a char var */
-			s = va_arg(arg, int);
-			for (s = 0; s != '\0'; s++)
-			{
-				_putchr(s);
-			}
-			cnt++;
-		}
-
-		else if(*p == '%')
-		{
-			_putchr('%');
-			cnt++;
-		}
-
 		else
 		{
-			_putchr('%');
-			_putchr(*p);
-			cnt += 2;
+			/* Move past '%' */
+			p++;
+
+			if (*p == 'c')
+			{
+				/* fetch a character and store it in c var */
+				c = va_arg(arg, int);
+				_putchr(c);
+				cnt++;
+			}
+			else if (*p == 's')
+			{
+				/* Fetch a stringand assign it to a char variable */
+				s = va_arg(arg, const char *);
+				/* Check for NULL terminator */
+				for (; *s != '\0'; s++)
+				{
+					_putchr(*s);
+					cnt++;
+				}
+			}
+			else if (*p == '%')
+			{
+				_putchr('%');
+				cnt++;
+			}
+			else
+			{
+				_putchr('%');
+				_putchr(*p);
+				cnt += 2;
+			}
 		}
 	}
 
 	va_end(arg);
 
-	return (*p);
+	return (cnt);
 }
