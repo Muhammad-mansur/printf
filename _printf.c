@@ -47,16 +47,18 @@ int _printf(const char *format, ...)
 					cnt++;
 				}
 			}
-			else if (*p == '%')
+			else 
 			{
 				_putchr('%');
-				cnt++;
-			}
-			else
-			{
-				_putchr('%');
-				_putchr(*p);
-				cnt += 2;
+				if (*p != '%') /* Avoid double printing of '%' for the '%%' case */
+				{
+					_putchr(*p);
+					cnt++;
+				}
+				else
+				{
+					cnt++; /* Count '%' only once for '%%' */
+				}
 			}
 		}
 	}
