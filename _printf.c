@@ -3,19 +3,20 @@
 int _printf(const char *format, ...)
 {
 	int chara_print = 0;
-
 	va_list list_of_args;
 
-	if(format == NULL){
+	if (format == NULL)
+	{
 		return (-1);
 	}
 
-	va_start(list_of_args, format);
+	va_start (list_of_args, format);
 
-	while (*format){
+	while (*format)
+	{
 		if (*format != '%')
 		{
-			write(1, format, 1);
+			write (1, format, 1);
 			chara_print++;
 		}
 		else
@@ -51,6 +52,6 @@ int _printf(const char *format, ...)
 
 	}
 
-	va_end(list_of_args);
-	return chara_print;
+	va_end (list_of_args);
+	return (chara_print);
 }
