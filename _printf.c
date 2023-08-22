@@ -43,15 +43,12 @@ int _printf(const char *format, ...)
 			}
 			else if (*format == 's')
 			{
-<<<<<<< HEAD
 				handle_string(list_of_args, &chara_print);
-=======
 				char *str = va_arg(list_of_args, char*);
 				int str_len = strlen(str);
 
 				write(1, str, str_len);
 				chara_print += str_len;
->>>>>>> parent of 583b1dd... Avoid Buffer overflow
 			}
 			else if (*format == 'd' || *format == 'i')
 			{
