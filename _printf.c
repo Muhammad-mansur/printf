@@ -1,69 +1,56 @@
 #include "main.h"
 
-/**
-  * _printf - printf function recreation
-  * format: string input
-  * Return: number of characters printed
-  */
-
 int _printf(const char *format, ...)
 {
-	/* To keep track of the number of characters printed */
-	int cnt = 0, c;
-	const char *p, *s;
+	int chara_print = 0;
 
-	va_list arg;
+	va_list list_of_args;
 
-	va_start(arg, format);
-
-	for (p = format; *p != '\0'; p++)
-	{
-		if (*p != '%')
-		{
-			_putchr(*p);
-			cnt++;
-		}
-
-		else
-		{
-			/* Move past '%' */
-			p++;
-
-			if (*p == 'c')
-			{
-				/* fetch a character and store it in c var */
-				c = va_arg(arg, int);
-				_putchr(c);
-				cnt++;
-			}
-			else if (*p == 's')
-			{
-				/* Fetch a stringand assign it to a char variable */
-				s = va_arg(arg, const char *);
-				/* Check for NULL terminator */
-				for (; *s != '\0'; s++)
-				{
-					_putchr(*s);
-					cnt++;
-				}
-			}
-			else 
-			{
-				_putchr('%');
-				if (*p != '%') /* Avoid double printing of '%' for the '%%' case */
-				{
-					_putchr(*p);
-					cnt++;
-				}
-				else
-				{
-					cnt++; /* Count '%' only once for '%%' */
-				}
-			}
-		}
+	if(format == NULL){
+		return (-1);
 	}
 
-	va_end(arg);
+	va_start(list_of_args, format);
 
-	return (cnt);
+	while (*format){
+		if (*format != '%')
+		{
+			write(1, format, 1);
+			chara_print++;
+		}
+		else
+		{
+			format++;
+			if (*format == '\0')
+				break;
+
+			if (*format == '%')
+			{
+				write(1, format, 1);
+				chara_print++;
+			}
+			else if (*format == 'c')
+			{
+				char c = va_arg(list_of_args, int);
+				write(1, &c, 1);
+				chara_print++;
+			}
+			else if (*format == 's')
+			{
+				char *str = va_arg(list_of_args, char*);
+				int str_len = 0;
+
+				while (str[str_len] != '\0')
+					str_len++;
+
+				write(1, str, str_len);
+				chara_print += str_len;
+			}
+		}
+		format++;
+
+	}
+
+	va_end(list_of_args);
+	return chara_print;
 }
