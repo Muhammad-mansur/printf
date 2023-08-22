@@ -38,40 +38,16 @@ int _printf(const char *format, ...)
 			}
 			else if (*format == 'c')
 			{
-				char c = va_arg(list_of_args, int);
-
-				write(1, &c, 1);
+				handle_char(list_of_args);
 				chara_print++;
 			}
 			else if (*format == 's')
 			{
-				char *str = va_arg(list_of_args, char*);
-				if (str == NULL)
-				{
-					write(1, "(null)", 6);
-					chara_print += 6;
-				}
-				else
-				{
-					int str_len = strlen(str);
-					
-					write(1, str, str_len);
-					chara_print += str_len;
-				}
+				handle_string(list_of_args, &chara_print);
 			}
 			else if (*format == 'd' || *format == 'i')
 			{
-				int num = va_arg(list_of_args, int);
-				char *buffer = NULL;
-				int len = snprintf(NULL, 0, "%d", num);
-				buffer = (char *)malloc(len + 1);
-				if (buffer)
-				{
-					snprintf(buffer, len + 1, "%d", num);
-					write(1, buffer, len);
-					chara_print += len;
-					free(buffer);
-				}
+				handle_decimal(list_of_args, &chara_print);
 			}
 			else
 			{
