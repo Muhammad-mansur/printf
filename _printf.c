@@ -42,6 +42,7 @@ int _printf(const char *format, ...)
 		}
 		else
 		{
+<<<<<<< HEAD
 			print_buffer(buffer, &buff_ind);
 			flags = get_flags(format, &i);
 			width = get_width(format, &i, list);
@@ -53,6 +54,40 @@ int _printf(const char *format, ...)
 			if (printed == -1)
 				return (-1);
 			printed_chars += printed;
+=======
+			format++;
+			if (*format == '\0')
+				break;
+
+			if (*format == '%')
+			{
+				write(1, format, 1);
+				chara_print++;
+			}
+			else if (*format == 'c')
+			{
+				handle_char(list_of_args);
+				chara_print++;
+			}
+			else if (*format == 's')
+			{
+				handle_string(list_of_args, &chara_print);
+				char *str = va_arg(list_of_args, char*);
+				int str_len = strlen(str);
+
+				write(1, str, str_len);
+				chara_print += str_len;
+			}
+			else if (*format == 'd' || *format == 'i')
+			{
+				handle_decimal(list_of_args, &chara_print);
+			}
+			else
+			{
+				write(1, format - 1, 2);
+				chara_print += 2;
+			}
+>>>>>>> 160141456a7118d41dbb0d15f8509242633fe477
 		}
 	}
 	print_buffer(buffer, &buff_ind);
