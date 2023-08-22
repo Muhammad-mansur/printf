@@ -62,11 +62,16 @@ int _printf(const char *format, ...)
 			else if (*format == 'd' || *format == 'i')
 			{
 				int num = va_arg(list_of_args, int);
-				char buffer[20];
-				int len = sprintf(buffer, "%d", num);
-
-				write(1, buffer, len);
-				chara_print += len;
+				char *buffer = NULL;
+				int len = snprintf(NULL, 0, "%d", num);
+				buffer = (char *)malloc(len + 1);
+				if (buffer)
+				{
+					snprintf(buffer, len + 1, "%d", num);
+					write(1, buffer, len);
+					chara_print += len;
+					free(buffer);
+				}
 			}
 			else
 			{
