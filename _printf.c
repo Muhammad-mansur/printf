@@ -11,6 +11,9 @@ void handle_char(va_list args);
 void handle_string(va_list args);
 void handle_decimal(va_list args);
 void handle_binary(va_list args);
+void handle_unsigned(va_list args);
+void handle_octal(va_list args);
+void handle_hexadecimal(va_list args, int uppercase);
 
 int _printf(const char *format, ...)
 {
@@ -53,6 +56,19 @@ int _printf(const char *format, ...)
 			else if (*format == 'd' || *format == 'i')
 			{
 				handle_decimal(list_of_args);
+			}
+			else if (*format == 'u')
+			{
+				handle_unsigned(list_of_args);
+			}
+			else if (*format == 'o')
+			{
+				handle_octal(list_of_args);
+			}
+			else if (*format == 'x' || *format == 'X')
+			{
+				int uppercase = (*format == 'X');
+				handle_hexadecimal(list_of_args, uppercase);
 			}
 			else if (*format == 'b')
 			{
@@ -121,4 +137,31 @@ void handle_binary(va_list args)
 	}
 
 	write(1, buffer, num_bits);
+}
+
+void handle_unsigned(va_list args)
+{
+	unsigned int num = va_arg(args, unsigned int);
+	char buffer[20];
+	int len = sprintf(buffer, "%u", num);
+	write(1, buffer, len);
+}
+
+void handle_octal(va_list args)
+{
+	unsigned int num = va_arg(args, unsigned int);
+	char buffer[20];
+	int len = sprintf(buffer, "%o", num);
+	write(1, buffer, len);
+}
+
+void handle_hexadecimal(va_list args, int uppercase)
+{
+	unsigned int num = va_arg(args, unsigned int);
+	char buffer[20];
+
+	char *formatSpecifier = (uppercase ? "%X" : "%x");
+
+	int len = sprintf(buffer, formatSpecifier, num);
+	write(1, buffer, len);
 }
