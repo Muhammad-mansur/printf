@@ -6,6 +6,12 @@
  * Return: number of characters printed
  */
 
+/* Function prototypes for specifier handlers */
+void handle_char(va_list args);
+void handle_string(va_list args);
+void handle_decimal(va_list args);
+void handle_binary(va_list args);
+
 int _printf(const char *format, ...)
 {
 	int chara_print = 0;
@@ -38,42 +44,19 @@ int _printf(const char *format, ...)
 			}
 			else if (*format == 'c')
 			{
-				char c = va_arg(list_of_args, int);
-
-				write(1, &c, 1);
-				chara_print++;
+				handle_char(list_of_args);
 			}
 			else if (*format == 's')
 			{
-				char *str = va_arg(list_of_args, char*);
-				int str_len = strlen(str);
-
-				write(1, str, str_len);
-				chara_print += str_len;
+				handle_string(list_of_args);
 			}
 			else if (*format == 'd' || *format == 'i')
 			{
-				int num = va_arg(list_of_args, int);
-				char buffer[20];
-				int len = sprintf(buffer, "%d", num);
-
-				write(1, buffer, len);
-				chara_print += len;
+				handle_decimal(list_of_args);
 			}
 			else if (*format == 'b')
 			{
-				unsigned int num = va_arg(list_of_args, unsigned int);
-				char buffer[33];
-				int index;
-
-				buffer[32] = '\0';
-				for (index = 31; index >= 0; index--)
-				{
-					buffer[index] = (num & 1) ? '1' : '0';
-					num >>= 1;
-				}
-				write(1, buffer, 32);
-				chara_print += 32;
+				handle_binary(list_of_args);
 			}
 			else
 			{
@@ -85,4 +68,50 @@ int _printf(const char *format, ...)
 	}
 	va_end(list_of_args);
 	return (chara_print);
+}
+
+/* Implementation of specifier handler functions */
+void handle_char(va_list args)
+{
+	char c = va_arg(args, int);
+	write(1, &c, 1);
+}
+
+void handle_string(va_list args)
+{
+	char *str = va_arg(args, char*);
+	int str_len = strlen(str);
+	write(1, str, str_len);
+}
+
+void handle_decimal(va_list args)
+{
+	int num = va_arg(args, int);
+	char buffer[20];
+	int len = sprintf(buffer, "%d", num);
+	write(1, buffer, len);
+}
+
+void handle_binary(va_list args)
+{
+	unsigned int num = va_arg(args, unsigned int);
+	char buffer[33];
+	int index;
+	int significant_digit_found = 0;
+
+	buffer[32] = '\0';
+
+	for (index = 31; index >= 0; index--)
+	{
+		int bit_value = (num >> index) & 1;
+		if (bit_value)
+			significant_digit_found = 1;
+
+		if (significant_digit_found)
+			buffer[31 - index] = bit_value ? '1' : '0';
+		else
+			buffer[31 - index] = ' ';
+	}
+
+	write(1, buffer, 32);
 }
