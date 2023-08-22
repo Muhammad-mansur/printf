@@ -97,21 +97,28 @@ void handle_binary(va_list args)
 	unsigned int num = va_arg(args, unsigned int);
 	char buffer[33];
 	int index;
-	int significant_digit_found = 0;
 
-	buffer[32] = '\0';
+	int num_bits = 0;
+	unsigned int temp = num;
 
-	for (index = 31; index >= 0; index--)
+	while (temp)
 	{
-		int bit_value = (num >> index) & 1;
-		if (bit_value)
-			significant_digit_found = 1;
-
-		if (significant_digit_found)
-			buffer[31 - index] = bit_value ? '1' : '0';
-		else
-			buffer[31 - index] = ' ';
+		num_bits++;
+		temp >>= 1;
 	}
 
-	write(1, buffer, 32);
+	if (num_bits == 0)
+	{
+		buffer[0] = '0';
+		num_bits = 1;
+	}
+
+	buffer[num_bits] = '\0';
+
+	for (index = num_bits - 1; index >= 0; index--)
+	{
+		buffer[num_bits - index - 1] = (num >> index) & 1 ? '1' : '0';
+	}
+
+	write(1, buffer, num_bits);
 }
