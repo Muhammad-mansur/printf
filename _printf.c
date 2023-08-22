@@ -51,6 +51,20 @@ int _printf(const char *format, ...)
 				write(1, buffer, len);
 				chara_print += len;
 			}
+			else if (*format == 'b')
+			{
+				unsigned int num = va_arg(list_of_args, unsigned int);
+				char buffer[33];
+				int index;
+				buffer[32] = '\0';
+				for (index = 31; index >= 0; index--)
+				{
+					buffer[index] = (num & 1) ? '1' : '0';
+					num >>= 1;
+				}
+				write(1, buffer, 32);
+				chara_print += 32;
+			}
 			else
 			{
 				write(1, format - 1, 2);
