@@ -43,6 +43,14 @@ int _printf(const char *format, ...)
 				write(1, str, str_len);
 				chara_print += str_len;
 			}
+			else if (*format == 'd' || *format == 'i')
+			{
+				int num = va_arg(list_of_args, int);
+				char buffer[20];
+				int len = sprintf(buffer, "%d", num);
+				write(1, buffer, len);
+				chara_print += len;
+			}
 			else
 			{
 				write(1, format - 1, 2);
