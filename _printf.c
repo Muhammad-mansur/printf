@@ -33,6 +33,7 @@ int _printf(const char *format, ...)
 			else if (*format == 'c')
 			{
 				char c = va_arg(list_of_args, int);
+
 				write(1, &c, 1);
 				chara_print++;
 			}
@@ -40,6 +41,7 @@ int _printf(const char *format, ...)
 			{
 				char *str = va_arg(list_of_args, char*);
 				int str_len = strlen(str);
+
 				write(1, str, str_len);
 				chara_print += str_len;
 			}
@@ -48,6 +50,7 @@ int _printf(const char *format, ...)
 				int num = va_arg(list_of_args, int);
 				char buffer[20];
 				int len = sprintf(buffer, "%d", num);
+
 				write(1, buffer, len);
 				chara_print += len;
 			}
@@ -56,6 +59,7 @@ int _printf(const char *format, ...)
 				unsigned int num = va_arg(list_of_args, unsigned int);
 				char buffer[33];
 				int index;
+
 				buffer[32] = '\0';
 				for (index = 31; index >= 0; index--)
 				{
