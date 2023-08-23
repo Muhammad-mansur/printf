@@ -4,7 +4,7 @@
   * _putchr - writes character c to stdout
   * @c: character to be printed
   *
-  * Returm: 1
+  * Return: 0
   */
 
 int _putchr(char c)
